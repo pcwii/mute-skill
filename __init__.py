@@ -5,6 +5,8 @@ from mycroft.skills.core import MycroftSkill, intent_handler, intent_file_handle
 from mycroft.util.log import getLogger
 from mycroft.skills.context import adds_context, removes_context
 
+from alsaaudio import Mixer
+
 _author__ = 'PCWii'
 # Release - 20180723
 
