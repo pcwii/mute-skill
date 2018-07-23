@@ -6,7 +6,7 @@ from mycroft.util.log import getLogger
 from mycroft.skills.context import adds_context, removes_context
 
 _author__ = 'PCWii'
-# Release - 20180713
+# Release - 20180723
 
 LOGGER = getLogger(__name__)
 
