@@ -34,3 +34,10 @@ class MuteSkill(MycroftSkill):
         if self.mute:
             self.mixer.setvolume(self.current_volume)
             self.mute = False
+
+    def stop(self):
+        pass
+
+
+def create_skill():
+    return MuteSkill()
