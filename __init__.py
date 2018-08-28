@@ -20,7 +20,7 @@ class MuteSkill(MycroftSkill):
     def __init__(self):
         super(MuteSkill, self).__init__(name="MuteSkill")
         self.mute_state = False
-        self.current_volume = 0
+        self.current_volume = 10
         self.mute_enable = True
 
     def initialize(self):
@@ -41,7 +41,7 @@ class MuteSkill(MycroftSkill):
     def handle_un_mute_intent(self, message):
         if self.mute_enable:
             if self.mute_state:
-                self.mixer.setvolume(self.current_volume)
+                self.mixer.setvolume(10)
                 self.mute_state = False
 
     def stop(self):
