@@ -4,6 +4,7 @@ from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler, intent_file_handler
 from mycroft.util.log import getLogger
 from mycroft.skills.context import adds_context, removes_context
+from mycroft.util.log import LOG
 
 from alsaaudio import Mixer
 
@@ -19,30 +20,21 @@ class MuteSkill(MycroftSkill):
     """
     def __init__(self):
         super(MuteSkill, self).__init__(name="MuteSkill")
-        self.mute_state = False
-        self.current_volume = 10
-        self.mute_enable = True
+        self.last_volume = 10
 
     def initialize(self):
         self.load_data_files(dirname(__file__))
-        try:
-            self.mixer = Mixer()
-        except:
-            self.mute_enable = False
+        self.mixer = Mixer()
 
     @intent_handler(IntentBuilder('MuteIntent').require("MuteKeyword").build())
     def handle_mute_intent(self, message):
-        if self.mute_enable:
-            self.current_volume = self.mixer.getvolume()[0]
-            self.mixer.setvolume(0)
-            self.mute_state = True
+        self.last_volume = self.mixer.getvolume()[0]
+        LOG.info(self.last_volume)
+        self.mixer.setvolume(0)
 
     @intent_handler(IntentBuilder('UnMuteIntent').require("UnMuteKeyword").build())
     def handle_un_mute_intent(self, message):
-        if self.mute_enable:
-            if self.mute_state:
-                self.mixer.setvolume(10)
-                self.mute_state = False
+        self.mixer.setvolume(self.last_volume)
 
     def stop(self):
         pass
