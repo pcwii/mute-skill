@@ -20,7 +20,8 @@ class MuteSkill(MycroftSkill):
     """
     def __init__(self):
         super(MuteSkill, self).__init__(name="MuteSkill")
-        self.last_volume = 10
+        self.last_volume = 11
+        self.default_volume = 11
 
     def initialize(self):
         self.load_data_files(dirname(__file__))
@@ -28,12 +29,16 @@ class MuteSkill(MycroftSkill):
 
     @intent_handler(IntentBuilder('MuteIntent').require("MuteKeyword").build())
     def handle_mute_intent(self, message):
-        self.last_volume = self.mixer.getvolume()[0]
+        temp_volume = self.mixer.getvolume()[0]
+        if temp_volume > 0:
+            self.last_volume = temp_volume
         LOG.info(self.last_volume)
         self.mixer.setvolume(0)
 
     @intent_handler(IntentBuilder('UnMuteIntent').require("UnMuteKeyword").build())
     def handle_un_mute_intent(self, message):
+        if self.last_volume == 0:
+            self.last_volume = self.default_volume
         self.mixer.setvolume(self.last_volume)
 
     def stop(self):
